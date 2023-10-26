@@ -1,106 +1,167 @@
-import React, { useState } from 'react';
-import OrgChart from 'react-orgchart';
-import 'react-orgchart/index.css';
-import './OrgChartComponents.css';
+import React, { useEffect, useState } from "react";
+import { Tree, TreeNode } from "react-organizational-chart";
+import styled from "@emotion/styled";
 
-const OrgChartComponent = () => {
-  // Define your organizational chart data
-  const orgChartData = {
-    name: 'CEO',
-    children: [
+import "./OrgChart.css";
+const StyledNode = styled.div`
+  padding: 8px;
+  border-radius: 8px;
+  display: inline-block;
+  border: 1px solid red;
+  margin:2px;
+`;
+
+
+
+const OrgChartComponents = () => {
+  const [orgChartData, setOrgChartData] = useState([]);
+
+  useEffect(() => {
+    const jsonData = [
       {
-        name: 'Manager',
-        attributes: {
-          department: 'Production',
-        },
-        children: [
+
+        "firstName": "Wilson",
+
+        "lastName": "Smith",
+
+        "email": "roger17@gmail.com",
+
+        "jobTitle": "CEO",
+
+        "id": "301"
+
+    ,
+        "children": [
           {
-            name: 'Foreman',
-            attributes: {
-              department: 'Fabrication',
-            },
-            children: [
+
+            "firstName": "John",
+    
+            "lastName": "Cena",
+    
+            "email": "john@gmail.com",
+    
+            "jobTitle": "CFO",
+    
+            "id": "101"
+          ,
+            "children": [
               {
-                name: 'Worker',
-              },
-            ],
+
+                "firstName": "Maria",
+        
+                "lastName": "Johnson (Sample Contact)",
+        
+                "email": "emailmaria@hubspot.com",
+        
+                "jobTitle": "Sales Manager",
+        
+                "id": "1"
+        
+            },
+              
+            ]
+          }, {
+
+            "firstName": "Mohit",
+    
+            "lastName": "Sharma",
+    
+            "email": "mohit342@gmail.com",
+    
+            "jobTitle": "COO",
+    
+            "id": "151",
+         
+            "children": [
+              {
+              "firstName": "Brian",
+
+              "lastName": "Halligan (Sample Contact)",
+      
+              "email": "bh@hubspot.com",
+      
+              "jobTitle": "HR Manager",
+      
+              "id": "51"
+      
+          }
+            ]
           },
           {
-            name: 'Foreman',
-            attributes: {
-              department: 'Assembly',
-            },
-            children: [
+            "firstName": "Malin",
+            "lastName": "Sik",
+            "email": "ms@gmail.com",
+            "jobTitle": "Vp of Marketing",
+            "id": "151",
+            "children": [
               {
-                name: 'Worker',
+                "firstName": "B",
+                "lastName": "H (Sample Contact)",
+                "email": "bh@xyz.com",
+                "jobTitle": "HR Manager",
+                "id": "51"
+              }
+            ]
+          },{
+            "firstName": "Malin",
+            "lastName": "Sik",
+            "email": "ms@gmail.com",
+            "jobTitle": "Vp of Engineering",
+            "id": "151",
+            "children":[
+              {
+                "firstName": "B",
+                "lastName": "H (Sample Contact)",
+                "email": "bh@xyz.com",
+                "jobTitle": "HR Manager",
+                "id": "51"
               },
-            ],
-          },
-        ],
-      },
-    ],
-  };
+              {
+                
+              }
 
-  const [selectedNode, setSelectedNode] = useState(null);
+            ]
+          
+              
 
-  // Function to traverse the tree and find a node by name
-  const findNodeByName = (nodeName, currentNode) => {
-    if (currentNode.name === nodeName) {
-      return currentNode;
-    } else if (currentNode.children) {
-      for (const child of currentNode.children) {
-        const foundNode = findNodeByName(nodeName, child);
-        if (foundNode) {
-          return foundNode;
-        }
+          }
+          
+          
+        ]
       }
-    }
-    return null;
-  };
+    ];
 
-  // Function to handle when a node in the organizational chart is clicked
-  const handleNodeClick = (nodeName) => {
-    const node = findNodeByName(nodeName, orgChartData);
-    if (node) {
-      setSelectedNode(node);
-    }
+    setOrgChartData(jsonData);
+  }, []);
+
+  
+  const renderOrgChart = (data) => {
+    return (
+      <div>
+      <Tree lineWidth={"2px"} lineColor={"green"} lineBorderRadius={"10px"}>
+      {data.map((node) => (
+  <TreeNode key={node.id} label={<div><StyledNode>{node.jobTitle} 
+  <br />{node.firstName} {node.lastName}</StyledNode></div>}>
+    {node.children && renderOrgChart(node.children)}
+  </TreeNode>
+
+))}
+
+
+      </Tree>
+      </div>
+    );
   };
 
   return (
-    <div className="org-chart-page">
-      <div className="org-chart-data">
-        <h2>Data on the Left Side</h2>
-        <ul>
-          <li onClick={() => handleNodeClick('CEO')}>CEO</li>
-          <li onClick={() => handleNodeClick('Manager')}>Manager</li>
-          <li onClick={() => handleNodeClick('Foreman')}>Foreman</li>
-          <li onClick={() => handleNodeClick('Worker')}>Worker</li>
-          {/* Add more list items for other names as needed */}
-        </ul>
-      </div>
-      <div className="org-chart-container">
-        {selectedNode && (
-          <OrgChart
-            tree={selectedNode}
-            NodeComponent={(props) => (
-              <div className="org-chart-node">
-                {props.node.name}
-                {props.node.attributes && (
-                  <div className="org-chart-attributes">
-                    Department: {props.node.attributes.department}
-                  </div>
-                )}
-              </div>
-            )}
-          />
-        )}
-      </div>
+    <div className="org-chart org-chart-container">
+      <h1>Organizational Chart</h1>
+      {renderOrgChart(orgChartData)}
     </div>
   );
 };
 
-export default OrgChartComponent;
-
+export default OrgChartComponents;
 
 
 

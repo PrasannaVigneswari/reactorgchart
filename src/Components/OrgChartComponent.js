@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tree, TreeNode } from "react-organizational-chart";
 import styled from "@emotion/styled";
-
-import "./OrgChart.css";
+import "./OrgChartComponents.css";
 const StyledNode = styled.div`
   padding: 8px;
   border-radius: 8px;
